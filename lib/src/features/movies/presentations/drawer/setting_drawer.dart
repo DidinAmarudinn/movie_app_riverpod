@@ -19,9 +19,13 @@ class SettingDrawer extends ConsumerWidget {
       child: SafeArea(
         child: Column(
           children: [
-            const SizedBox(),
+            Text(
+            isActive ? "Dark" : "Light",
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.headline1?.color),
+            ),
             Switch.adaptive(
-                value: isActive, onChanged: (val) => toogleTheme(ref))
+                value: isActive, onChanged: (val) => toogleTheme(ref)),
           ],
         ),
       ),

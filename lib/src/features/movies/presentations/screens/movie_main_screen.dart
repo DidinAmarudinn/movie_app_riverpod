@@ -44,16 +44,24 @@ class _MovieMainScreenState extends ConsumerState<MovieMainScreen>
           ),
           centerTitle: false,
           actions: [
-            Builder(builder: (ctx) {
-              return IconButton(
-                onPressed: () {
-                  displayEndDrawer(ctx);
-                },
-                icon: const Icon(
-                  Icons.settings_outlined,
-                ),
-              );
-            })
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.search_outlined,
+              ),
+            ),
+            Builder(
+              builder: (ctx) {
+                return IconButton(
+                  onPressed: () {
+                    displayEndDrawer(ctx);
+                  },
+                  icon: const Icon(
+                    Icons.settings_outlined,
+                  ),
+                );
+              },
+            ),
           ],
           bottom: TabBar(
             indicatorSize: TabBarIndicatorSize.tab,

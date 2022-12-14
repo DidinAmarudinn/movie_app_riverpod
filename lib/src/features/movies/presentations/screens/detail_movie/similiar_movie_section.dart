@@ -2,15 +2,77 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:movie_app_riverpod/src/constants/api_constants.dart';
-import 'package:movie_app_riverpod/src/constants/image_constants.dart';
-import 'package:movie_app_riverpod/src/features/movies/domain/entities/movie.dart';
-import 'package:movie_app_riverpod/src/features/movies/presentations/screens/detail_movie/detail_movie_screen.dart';
 
-class MovieItemList extends StatelessWidget {
+import 'package:movie_app_riverpod/src/features/movies/presentations/notifier/movie_notifier.dart';
+
+import '../../../../../constants/api_constants.dart';
+import '../../../../../constants/image_constants.dart';
+import '../../../../../shared_ui/pagnation_widget.dart';
+import '../../../domain/entities/movie.dart';
+import 'detail_movie_screen.dart';
+
+class SimiliarMovieSection extends ConsumerStatefulWidget {
+  final int id;
+  const SimiliarMovieSection({super.key, 
+    required this.id,
+  });
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _SimiliarMovieSectionState();
+}
+
+class _SimiliarMovieSectionState extends ConsumerState<SimiliarMovieSection> {
+final ScrollController scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    scrollController.addListener(() {
+      double maxScroll = scrollController.position.maxScrollExtent;
+      double currentScroll = scrollController.position.pixels;
+      double delta = MediaQuery.of(context).size.width * 0.20;
+      if (maxScroll - currentScroll <= delta) {
+        ref.read(itemsSimmiliarsMovieProvider(widget.id).notifier).fetchNextBatch();
+      }
+    });
+    return Scaffold(
+      body: CustomScrollView(
+        controller: scrollController,
+        slivers: [
+          const SliverToBoxAdapter(
+            child: SizedBox(
+              height: 12,
+            ),
+          ),
+          SimiliarItemList(
+            stateNotifierProvider: itemsSimmiliarsMovieProvider(widget.id),
+            onTap: () {
+              ref.read(itemsSimmiliarsMovieProvider(widget.id).notifier).fetchFirstBatch();
+            },
+          ),
+          NoMoreItems(
+            stateNotifierProvider: itemsSimmiliarsMovieProvider(widget.id),
+            callback: () =>
+                ref.read(itemsSimmiliarsMovieProvider(widget.id).notifier).noMoreItems,
+          ),
+          OnGoingBottomWidget(
+            stateNotifierProvider: itemsSimmiliarsMovieProvider(widget.id),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SimiliarItemList extends StatelessWidget {
   final StateNotifierProvider stateNotifierProvider;
   final VoidCallback onTap;
-  const MovieItemList(
+  const SimiliarItemList(
       {Key? key, required this.stateNotifierProvider, required this.onTap})
       : super(key: key);
 
@@ -34,7 +96,7 @@ class MovieItemList extends StatelessWidget {
                     ],
                   ),
                 )
-              : ItemsListBuilder(
+              : ItemsListSimiliarBuilder(
                   items: items,
                 );
         },
@@ -59,12 +121,12 @@ class MovieItemList extends StatelessWidget {
           ),
         ),
         onGoingLoading: (items) {
-          return ItemsListBuilder(
+          return ItemsListSimiliarBuilder(
             items: items,
           );
         },
         onGoingError: (items, e) {
-          return ItemsListBuilder(
+          return ItemsListSimiliarBuilder(
             items: items,
           );
         },
@@ -73,8 +135,8 @@ class MovieItemList extends StatelessWidget {
   }
 }
 
-class ItemsListBuilder extends StatelessWidget {
-  const ItemsListBuilder({
+class ItemsListSimiliarBuilder extends StatelessWidget {
+  const ItemsListSimiliarBuilder({
     Key? key,
     required this.items,
   }) : super(key: key);
@@ -94,8 +156,8 @@ class ItemsListBuilder extends StatelessWidget {
           crossAxisSpacing: 12,
           repeatPattern: QuiltedGridRepeatPattern.inverted,
           pattern: const [
-            QuiltedGridTile(5, 2),
-            QuiltedGridTile(4, 2),
+            QuiltedGridTile(2, 2),
+            QuiltedGridTile(2, 2),
           ],
         ),
         childrenDelegate: SliverChildBuilderDelegate(
@@ -112,7 +174,7 @@ class ItemsListBuilder extends StatelessWidget {
                       child:items[index].backdropPath != null ? CachedNetworkImage(
                         fit: BoxFit.cover,
                         imageUrl: getOriginalImageUrl(
-                          items[index].backdropPath,
+                          items[index].posterPath,
                         ),
                         errorWidget: ((context, url, error) => Image.asset(
                             ImageConstants.imageNotFound,
@@ -144,35 +206,14 @@ class ItemsListBuilder extends StatelessWidget {
                     top: 12,
                     right: 12,
                     child: Text(
-                      items[index].voteAverage.toString(),
+                      items[index].voteAverage?.toStringAsFixed(1) ?? "",
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 12,
-                    left: 12,
-                    child: SizedBox(
-                      height: 150,
-                      width: 100,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: items[index].posterPath != null
-                            ? CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: getImageUrl(
-                                  items[index].posterPath,
-                                ),
-                                errorWidget: ((context, url, error) =>
-                                    Image.asset(ImageConstants.imageNotFound,
-                                        fit: BoxFit.cover)),
-                              )
-                            : const SizedBox(),
-                      ),
-                    ),
-                  )
+                 
                 ],
               ),
             );
