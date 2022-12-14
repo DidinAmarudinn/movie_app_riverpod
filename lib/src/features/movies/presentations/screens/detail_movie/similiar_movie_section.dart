@@ -171,7 +171,7 @@ class ItemsListSimiliarBuilder extends StatelessWidget {
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child:items[index].backdropPath != null ? CachedNetworkImage(
+                      child:items[index].posterPath != null ? CachedNetworkImage(
                         fit: BoxFit.cover,
                         imageUrl: getOriginalImageUrl(
                           items[index].posterPath,

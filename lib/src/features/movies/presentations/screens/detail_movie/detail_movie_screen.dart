@@ -101,7 +101,7 @@ class _DetailMovieScreenState extends ConsumerState<DetailMovieScreen>
                                   ),
                                 ),
                               ),
-                              IconButton(onPressed: (){}, icon: const Icon(Icons.favorite_outline, size: 30,))
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.favorite_outline, size: 30,color: Colors.white,))
                             ],
                           ),
                           const Spacer(),

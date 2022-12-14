@@ -8,9 +8,11 @@ const String nowPlayingMovieUrl = "$baseUrl/movie/now_playing?$apiKey&page=";
 const String latestMovieUrl = "$baseUrl/movie/latest?$apiKey&page=";
 const String detailMovieUrl = "$baseUrl/movie";
 const String simmiliarsMovieUrl = "$baseUrl/movie/";
-
+const String trandingMovieUrl = "$baseUrl/trending/movie/week?$apiKey";
+const String genresMovieUrl = "$baseUrl/genre/movie/list?$apiKey";
 const String baseImageUrl = 'https://image.tmdb.org/t/p/w500';
 const String baseImageUrlOriginal = 'https://image.tmdb.org/t/p/original';
+const String getMovieByGenreUrl = "$baseUrl/discover/movie?$apiKey&with_genres=";
 String getImageUrl(String? path) {
   return "$baseImageUrl$path";
 }
