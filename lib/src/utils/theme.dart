@@ -90,6 +90,5 @@ class ThemeNotifier extends StateNotifier<ThemeData> {
       state = ThemeConfig.darkModeAppTheme;
       preferences.setString(key, 'dark');
     }
-    print(_mode);
   }
 }

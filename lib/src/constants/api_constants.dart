@@ -6,6 +6,8 @@ const String upcomingMovieUrl = "$baseUrl/movie/upcoming?$apiKey&page=";
 const String topRatedMovieUrl = "$baseUrl/movie/top_rated?$apiKey&page=";
 const String nowPlayingMovieUrl = "$baseUrl/movie/now_playing?$apiKey&page=";
 const String latestMovieUrl = "$baseUrl/movie/latest?$apiKey&page=";
+const String detailMovieUrl = "$baseUrl/movie";
+const String simmiliarsMovieUrl = "$baseUrl/movie/";
 
 const String baseImageUrl = 'https://image.tmdb.org/t/p/w500';
 const String baseImageUrlOriginal = 'https://image.tmdb.org/t/p/original';
