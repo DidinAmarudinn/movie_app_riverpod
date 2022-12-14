@@ -3,17 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/notifier/movie_notifier.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/widget/items_movie.dart';
 
-import '../../../../shared_ui/pagnation_widget.dart';
+import '../../../../../shared_ui/pagnation_widget.dart';
 
-class TopRatedMovieScreen extends ConsumerStatefulWidget {
-  const TopRatedMovieScreen({super.key});
+class PopularMovieScreen extends ConsumerStatefulWidget {
+  const PopularMovieScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _TopRatedMovieScreenState();
+      _PopularMovieScreenState();
 }
 
-class _TopRatedMovieScreenState extends ConsumerState<TopRatedMovieScreen> {
+class _PopularMovieScreenState extends ConsumerState<PopularMovieScreen> {
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -29,31 +29,27 @@ class _TopRatedMovieScreenState extends ConsumerState<TopRatedMovieScreen> {
       double currentScroll = scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.width * 0.20;
       if (maxScroll - currentScroll <= delta) {
-        ref.read(itemsTopRatedMovieProvider.notifier).fetchNextBatch();
+        ref.read(itemsPopularMovieProvider.notifier).fetchNextBatch();
       }
     });
     return Scaffold(
       body: CustomScrollView(
         controller: scrollController,
         slivers: [
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 12,
-            ),
-          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 12,),),
           MovieItemList(
-            stateNotifierProvider: itemsTopRatedMovieProvider,
+            stateNotifierProvider: itemsPopularMovieProvider,
             onTap: () {
-              ref.read(itemsTopRatedMovieProvider.notifier).fetchFirstBatch();
+              ref.read(itemsPopularMovieProvider.notifier).fetchFirstBatch();
             },
           ),
           NoMoreItems(
-            stateNotifierProvider: itemsTopRatedMovieProvider,
+            stateNotifierProvider: itemsPopularMovieProvider,
             callback: () =>
-                ref.read(itemsTopRatedMovieProvider.notifier).noMoreItems,
+                ref.read(itemsPopularMovieProvider.notifier).noMoreItems,
           ),
           OnGoingBottomWidget(
-            stateNotifierProvider: itemsTopRatedMovieProvider,
+            stateNotifierProvider: itemsPopularMovieProvider,
           ),
         ],
       ),

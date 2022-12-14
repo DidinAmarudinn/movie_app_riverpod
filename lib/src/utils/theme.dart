@@ -22,6 +22,12 @@ class ThemeConfig {
     scaffoldBackgroundColor: blackColor,
     cardColor: greyColor,
     indicatorColor: redColor,
+       tabBarTheme: const TabBarTheme(
+      labelStyle: TextStyle(
+        color: whiteColor
+      ),
+      labelColor: whiteColor
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: drawerColor,
       iconTheme: IconThemeData(
@@ -41,6 +47,13 @@ class ThemeConfig {
     scaffoldBackgroundColor: whiteColor,
     cardColor: greyColor,
     indicatorColor: redColor,
+    tabBarTheme: const TabBarTheme(
+      labelStyle: TextStyle(
+        color: blackColor
+      ),
+       labelColor: blackColor
+    ),
+    
     appBarTheme: const AppBarTheme(
       backgroundColor: whiteColor,
       elevation: 0,

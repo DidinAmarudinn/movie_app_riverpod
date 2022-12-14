@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:movie_app_riverpod/src/features/movies/presentations/screens/movie_main_screen.dart';
+import 'package:movie_app_riverpod/src/features/movies/presentations/screens/main/movie_main_screen.dart';
 import 'package:movie_app_riverpod/src/utils/theme.dart';
 
 void main() {

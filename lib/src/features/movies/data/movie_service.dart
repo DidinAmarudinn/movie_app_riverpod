@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app_riverpod/src/constants/api_constants.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/detail_movie.dart';
+import 'package:movie_app_riverpod/src/features/movies/domain/entities/list_genres.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/list_movie.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/movie.dart';
@@ -18,6 +19,9 @@ abstract class MovieService {
   Future<List<Movie>> getListNowPlayingMovie(int page);
   Future<DetailMovie> getDetailMovie(int id);
   Future<List<Movie>> getSimmiliarsMovie(int id, int page);
+  Future<List<Movie>> getTrandingMovei();
+  Future<ListGenres> getMovieGenres();
+  Future<List<Movie>> getMoviesByGenres(int idGenre, int page);
 }
 
 class MovieServiceImpl extends MovieService {
@@ -54,16 +58,33 @@ class MovieServiceImpl extends MovieService {
         builder: (data) => ListMovie.fromJson(data).results ?? [],
       );
 
-
   @override
   Future<DetailMovie> getDetailMovie(int id) => _getData(
         uri: Uri.parse("$detailMovieUrl/$id?$apiKey"),
         builder: (data) => DetailMovie.fromJson(data),
       );
 
-      @override
-  Future<List<Movie>> getSimmiliarsMovie(int id, int page) =>  _getData(
-        uri: Uri.parse("$simmiliarsMovieUrl/$id/recommendations?$apiKey&page=$page"),
+  @override
+  Future<List<Movie>> getSimmiliarsMovie(int id, int page) => _getData(
+        uri: Uri.parse(
+            "$simmiliarsMovieUrl/$id/recommendations?$apiKey&page=$page"),
+        builder: (data) => ListMovie.fromJson(data).results ?? [],
+      );
+  @override
+  Future<List<Movie>> getTrandingMovei() => _getData(
+        uri: Uri.parse(trandingMovieUrl),
+        builder: (data) => ListMovie.fromJson(data).results ?? [],
+      );
+
+  @override
+  Future<ListGenres> getMovieGenres() => _getData(
+        uri: Uri.parse(genresMovieUrl),
+        builder: (data) => ListGenres.fromJson(data),
+      );
+
+  @override
+  Future<List<Movie>> getMoviesByGenres(int idGenre, int page) => _getData(
+        uri: Uri.parse("$getMovieByGenreUrl$idGenre&page=$page"),
         builder: (data) => ListMovie.fromJson(data).results ?? [],
       );
 
@@ -74,7 +95,7 @@ class MovieServiceImpl extends MovieService {
     try {
       final response = await client.get(uri);
       log(response.body);
-     log("$detailMovieUrl${"400"}?$apiKey");
+      log("$detailMovieUrl${"400"}?$apiKey");
       switch (response.statusCode) {
         case 200:
           final data = json.decode(response.body);
@@ -90,9 +111,6 @@ class MovieServiceImpl extends MovieService {
       throw const APIError.noInternetConnection();
     }
   }
-  
-  
-  
 }
 
 final httpProviderProvider = Provider<http.Client>((ref) {

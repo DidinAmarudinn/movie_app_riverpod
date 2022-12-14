@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/drawer/setting_drawer.dart';
-import 'package:movie_app_riverpod/src/features/movies/presentations/screens/latest_movie_screen.dart';
-import 'package:movie_app_riverpod/src/features/movies/presentations/screens/now_playing_movie_screen.dart';
-import 'package:movie_app_riverpod/src/features/movies/presentations/screens/popular_movie_screen.dart';
-import 'package:movie_app_riverpod/src/features/movies/presentations/screens/top_rated_movie_screen.dart';
-import 'package:movie_app_riverpod/src/features/movies/presentations/screens/upcoming_movie_screen.dart';
+import 'package:movie_app_riverpod/src/features/movies/presentations/screens/main/popular_movie_screen.dart';
+import 'package:movie_app_riverpod/src/features/movies/presentations/screens/main/top_rated_movie_screen.dart';
+import 'package:movie_app_riverpod/src/features/movies/presentations/screens/main/upcoming_movie_screen.dart';
+import 'package:movie_app_riverpod/src/features/movies/presentations/screens/search/search_movie_screen.dart';
+
+import 'latest_movie_screen.dart';
+import 'now_playing_movie_screen.dart';
 
 class MovieMainScreen extends ConsumerStatefulWidget {
   const MovieMainScreen({super.key});
@@ -45,7 +47,9 @@ class _MovieMainScreenState extends ConsumerState<MovieMainScreen>
           centerTitle: false,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchMovieScreen()));
+              },
               icon: const Icon(
                 Icons.search_outlined,
               ),

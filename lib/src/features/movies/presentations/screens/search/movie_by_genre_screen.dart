@@ -3,17 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/notifier/movie_notifier.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/widget/items_movie.dart';
 
-import '../../../../shared_ui/pagnation_widget.dart';
+import '../../../../../shared_ui/pagnation_widget.dart';
 
-class UpcomingMovieScreen extends ConsumerStatefulWidget {
-  const UpcomingMovieScreen({super.key});
+class MovieByGenreScreen extends ConsumerStatefulWidget {
+  final int genreId;
+  final String? genreName;
+  const MovieByGenreScreen({
+    super.key,
+    required this.genreId,
+    this.genreName,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _UpcomingMovieScreenState();
+      _MovieByGenreScreenState();
 }
 
-class _UpcomingMovieScreenState extends ConsumerState<UpcomingMovieScreen> {
+class _MovieByGenreScreenState extends ConsumerState<MovieByGenreScreen> {
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -29,10 +35,21 @@ class _UpcomingMovieScreenState extends ConsumerState<UpcomingMovieScreen> {
       double currentScroll = scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.width * 0.20;
       if (maxScroll - currentScroll <= delta) {
-        ref.read(itemsUpcomingMovieProvider.notifier).fetchNextBatch();
+        ref
+            .read(itemsMovieByGenreProvider(widget.genreId).notifier)
+            .fetchNextBatch();
       }
     });
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          widget.genreName ?? "",
+          style: Theme.of(context).textTheme.headline1?.copyWith(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+        ),
+      ),
       body: CustomScrollView(
         controller: scrollController,
         slivers: [
@@ -42,18 +59,21 @@ class _UpcomingMovieScreenState extends ConsumerState<UpcomingMovieScreen> {
             ),
           ),
           MovieItemList(
-            stateNotifierProvider: itemsUpcomingMovieProvider,
+            stateNotifierProvider: itemsMovieByGenreProvider(widget.genreId),
             onTap: () {
-              ref.read(itemsUpcomingMovieProvider.notifier).fetchFirstBatch();
+              ref
+                  .read(itemsMovieByGenreProvider(widget.genreId).notifier)
+                  .fetchFirstBatch();
             },
           ),
           NoMoreItems(
-            stateNotifierProvider: itemsUpcomingMovieProvider,
-            callback: () =>
-                ref.read(itemsUpcomingMovieProvider.notifier).noMoreItems,
+            stateNotifierProvider: itemsMovieByGenreProvider(widget.genreId),
+            callback: () => ref
+                .read(itemsMovieByGenreProvider(widget.genreId).notifier)
+                .noMoreItems,
           ),
           OnGoingBottomWidget(
-            stateNotifierProvider: itemsUpcomingMovieProvider,
+            stateNotifierProvider: itemsMovieByGenreProvider(widget.genreId),
           ),
         ],
       ),

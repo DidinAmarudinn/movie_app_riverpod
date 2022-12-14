@@ -49,6 +49,14 @@ class DetailSection extends StatelessWidget {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        data?.releaseDate ?? "",
+                        style: Theme.of(context).textTheme.headline1?.copyWith(
+                            fontSize: 14, fontWeight: FontWeight.w300),
+                      ),
+                      const SizedBox(
                         height: 12,
                       ),
                       Container(
@@ -70,25 +78,22 @@ class DetailSection extends StatelessWidget {
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(
-                        height: 12,
+                        height: 8,
                       ),
                       if (data?.genres != null)
                         Wrap(
                           children: data!.genres!
                               .map((e) => Container(
                                   padding: const EdgeInsets.all(4),
-                                  margin: const EdgeInsets.only(right: 6),
+                                  margin: const EdgeInsets.only(right: 6,bottom: 6),
                                   decoration: BoxDecoration(
                                     color: ThemeConfig.greyColor,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
                                     e.name ?? "",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .headline1
-                                            ?.color,
+                                    style: const TextStyle(
+                                        color:Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w300),
                                   )))
@@ -136,7 +141,7 @@ class DetailSection extends StatelessWidget {
               children: data!.productionCompanies!
                   .map((e) => Container(
                       padding: const EdgeInsets.all(6),
-                      margin: const EdgeInsets.only(right: 6,bottom: 7),
+                      margin: const EdgeInsets.only(right: 6, bottom: 7),
                       decoration: BoxDecoration(
                         color: ThemeConfig.greyColor.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(4),

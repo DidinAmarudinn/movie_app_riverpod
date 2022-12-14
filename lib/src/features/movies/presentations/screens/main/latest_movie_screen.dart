@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/notifier/movie_notifier.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/widget/items_movie.dart';
 
-import '../../../../shared_ui/pagnation_widget.dart';
+import '../../../../../shared_ui/pagnation_widget.dart';
 
 class LatestMovieScreen extends ConsumerStatefulWidget {
   const LatestMovieScreen({super.key});
