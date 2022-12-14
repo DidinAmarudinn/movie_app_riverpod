@@ -1,0 +1,4 @@
+enum ThemeModes {
+  light,
+  dark,
+}
