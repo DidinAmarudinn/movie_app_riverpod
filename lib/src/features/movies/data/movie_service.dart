@@ -7,6 +7,7 @@ import 'package:movie_app_riverpod/src/features/movies/domain/entities/detail_mo
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/list_genres.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/list_movie.dart';
 import 'package:http/http.dart' as http;
+import 'package:movie_app_riverpod/src/features/movies/domain/entities/list_trailer.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/movie.dart';
 
 import '../../../exceptions/api_error.dart';
@@ -22,6 +23,7 @@ abstract class MovieService {
   Future<List<Movie>> getTrandingMovei();
   Future<ListGenres> getMovieGenres();
   Future<List<Movie>> getMoviesByGenres(int idGenre, int page);
+  Future<Trailer?> getMovieTrailer(int id);
 }
 
 class MovieServiceImpl extends MovieService {
@@ -88,6 +90,12 @@ class MovieServiceImpl extends MovieService {
         builder: (data) => ListMovie.fromJson(data).results ?? [],
       );
 
+  @override
+  Future<Trailer?> getMovieTrailer(int id) => _getData(
+        uri: Uri.parse("$getMovieTrailerUrl/$id/videos?$apiKey"),
+        builder: (data) => ListTrailerVideo.fromJson(data).results?[0],
+      );
+
   Future<T> _getData<T>({
     required Uri uri,
     required T Function(dynamic data) builder,
@@ -95,7 +103,7 @@ class MovieServiceImpl extends MovieService {
     try {
       final response = await client.get(uri);
       log(response.body);
-      log("$detailMovieUrl${"400"}?$apiKey");
+      log("$getMovieTrailerUrl${500}/videos/$apiKey");
       switch (response.statusCode) {
         case 200:
           final data = json.decode(response.body);

@@ -5,6 +5,7 @@ import 'package:movie_app_riverpod/src/exceptions/api_error.dart';
 import 'package:movie_app_riverpod/src/features/movies/data/movie_service.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/detail_movie.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/list_genres.dart';
+import 'package:movie_app_riverpod/src/features/movies/domain/entities/list_trailer.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/movie.dart';
 
 abstract class MovieRepository {
@@ -17,6 +18,7 @@ abstract class MovieRepository {
   FutureEither<List<Movie>> getMoviesByGenres(int genreId, int page);
   FutureEither<List<Movie>> getTrandingMovie();
   FutureEither<DetailMovie?> getDetailMovie(int id);
+  FutureEither<Trailer?> getTrailerMovie(int id);
   FutureEither<ListGenres> getMovieGenres();
 }
 
@@ -109,6 +111,15 @@ class MovieRepositoryImpl extends MovieRepository {
   FutureEither<List<Movie>> getMoviesByGenres(int genreId, int page) async {
     try {
       return right(await service.getMoviesByGenres(genreId, page));
+    } catch (e) {
+      return left(e as APIError);
+    }
+  }
+  
+  @override
+  FutureEither<Trailer?> getTrailerMovie(int id) async {
+     try {
+      return right(await service.getMovieTrailer(id));
     } catch (e) {
       return left(e as APIError);
     }

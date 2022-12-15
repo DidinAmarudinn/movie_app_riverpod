@@ -5,6 +5,7 @@ import 'package:movie_app_riverpod/src/constants/api_constants.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/notifier/detail_movie_notifier.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/screens/detail_movie/detail_section.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/screens/detail_movie/similiar_movie_section.dart';
+import 'package:movie_app_riverpod/src/features/movies/presentations/screens/detail_movie/trailer_dialog.dart';
 import 'package:movie_app_riverpod/src/shared_ui/error_widget.dart';
 import 'package:movie_app_riverpod/src/shared_ui/loading_widget.dart';
 import 'package:movie_app_riverpod/src/utils/theme.dart';
@@ -48,12 +49,12 @@ class _DetailMovieScreenState extends ConsumerState<DetailMovieScreen>
                 child: Stack(
                   children: [
                     if (data?.backdropPath != null)
-                    Positioned.fill(
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: getOriginalImageUrl(data?.backdropPath),
+                      Positioned.fill(
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: getOriginalImageUrl(data?.backdropPath),
+                        ),
                       ),
-                    ),
                     Positioned.fill(
                       child: Container(
                         decoration: BoxDecoration(
@@ -101,7 +102,13 @@ class _DetailMovieScreenState extends ConsumerState<DetailMovieScreen>
                                   ),
                                 ),
                               ),
-                              IconButton(onPressed: (){}, icon: const Icon(Icons.favorite_outline, size: 30,color: Colors.white,))
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.favorite_outline,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ))
                             ],
                           ),
                           const Spacer(),
@@ -123,25 +130,43 @@ class _DetailMovieScreenState extends ConsumerState<DetailMovieScreen>
                             child: Text(
                                 "IMDB ${data?.voteAverage?.toStringAsFixed(1) ?? ""}"),
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(2),
-                                margin: const EdgeInsets.only(right: 8),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: ThemeConfig.redColor,
+                          InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (context) {
+                                    return Wrap(
+                                      children: [
+                                        TrailerDialog(widget.id),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(2),
+                                  margin: const EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: ThemeConfig.redColor,
+                                  ),
+                                  child: const Icon(
+                                    Icons.play_arrow,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
                                 ),
-                                child: const Icon(
-                                  Icons.play_arrow,
-                                  size: 22,
+                                const Text(
+                                  "Watch Trailer",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w300),
                                 ),
-                              ),
-                              const Text(
-                                "Watch Trailer",
-                                style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300),
-                              ),
-                            ],
+                              ],
+                            ),
                           )
                         ],
                       ),
