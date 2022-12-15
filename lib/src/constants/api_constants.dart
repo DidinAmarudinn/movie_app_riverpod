@@ -13,6 +13,7 @@ const String genresMovieUrl = "$baseUrl/genre/movie/list?$apiKey";
 const String baseImageUrl = 'https://image.tmdb.org/t/p/w500';
 const String baseImageUrlOriginal = 'https://image.tmdb.org/t/p/original';
 const String getMovieByGenreUrl = "$baseUrl/discover/movie?$apiKey&with_genres=";
+const String getMovieTrailerUrl = "$baseUrl/movie/";
 String getImageUrl(String? path) {
   return "$baseImageUrl$path";
 }
