@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app_riverpod/src/constants/api_constants.dart';
@@ -24,6 +23,7 @@ abstract class MovieService {
   Future<ListGenres> getMovieGenres();
   Future<List<Movie>> getMoviesByGenres(int idGenre, int page);
   Future<Trailer?> getMovieTrailer(int id);
+  Future<List<Movie>> searchMovie(String query);
 }
 
 class MovieServiceImpl extends MovieService {
@@ -96,14 +96,20 @@ class MovieServiceImpl extends MovieService {
         builder: (data) => ListTrailerVideo.fromJson(data).results?[0],
       );
 
+  @override
+  Future<List<Movie>> searchMovie(String query) {
+    return _getData(
+      uri: Uri.parse("$searchMovieUrl$query"),
+      builder: (data) => ListMovie.fromJson(data).results ?? [],
+    );
+  }
+
   Future<T> _getData<T>({
     required Uri uri,
     required T Function(dynamic data) builder,
   }) async {
     try {
       final response = await client.get(uri);
-      log(response.body);
-      log("$getMovieTrailerUrl${500}/videos/$apiKey");
       switch (response.statusCode) {
         case 200:
           final data = json.decode(response.body);

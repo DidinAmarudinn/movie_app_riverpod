@@ -6,6 +6,7 @@ import 'package:movie_app_riverpod/src/constants/api_constants.dart';
 import 'package:movie_app_riverpod/src/constants/image_constants.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/movie.dart';
 import 'package:movie_app_riverpod/src/features/movies/presentations/screens/detail_movie/detail_movie_screen.dart';
+import 'package:movie_app_riverpod/src/shared_ui/loading_widget.dart';
 
 class MovieItemList extends StatelessWidget {
   final StateNotifierProvider stateNotifierProvider;
@@ -39,7 +40,8 @@ class MovieItemList extends StatelessWidget {
                 );
         },
         loading: () => const SliverToBoxAdapter(
-            child: Center(child: CircularProgressIndicator())),
+          child: LoadingWidget(),
+        ),
         error: (e) => SliverToBoxAdapter(
           child: Center(
             child: Column(
@@ -101,23 +103,29 @@ class ItemsListBuilder extends StatelessWidget {
         childrenDelegate: SliverChildBuilderDelegate(
           (context, index) {
             return InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailMovieScreen(items[index].id ?? 0)));
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            DetailMovieScreen(items[index].id ?? 0)));
               },
               child: Stack(
                 children: [
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child:items[index].backdropPath != null ? CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: getOriginalImageUrl(
-                          items[index].backdropPath,
-                        ),
-                        errorWidget: ((context, url, error) => Image.asset(
-                            ImageConstants.imageNotFound,
-                            fit: BoxFit.cover)),
-                      ): const SizedBox(),
+                      child: items[index].backdropPath != null
+                          ? CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: getOriginalImageUrl(
+                                items[index].backdropPath,
+                              ),
+                              errorWidget: ((context, url, error) =>
+                                  Image.asset(ImageConstants.imageNotFound,
+                                      fit: BoxFit.cover)),
+                            )
+                          : const SizedBox(),
                     ),
                   ),
                   Positioned.fill(

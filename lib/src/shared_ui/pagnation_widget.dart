@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_app_riverpod/src/shared_ui/loading_widget.dart';
 
 class NoMoreItems extends ConsumerWidget {
   final StateNotifierProvider stateNotifierProvider;
@@ -52,7 +53,7 @@ class OnGoingBottomWidget extends StatelessWidget {
           return state.maybeWhen(
             orElse: () => const SizedBox.shrink(),
             onGoingLoading: (items) =>
-                const Center(child: CircularProgressIndicator()),
+                const LoadingWidget(),
             onGoingError: (items, e) => Center(
               child: Column(
                 children: [

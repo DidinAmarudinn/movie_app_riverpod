@@ -39,41 +39,44 @@ class _TrailerDialogState extends ConsumerState<TrailerDialog> {
   @override
   Widget build(BuildContext context) {
     final trailerProvider = ref.watch(trailerMovieProvider(widget.id));
-    return SizedBox(
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
       height: MediaQuery.of(context).size.height * 0.4,
       width: double.infinity,
-      child: trailerProvider.when(
-        initial: () => const SizedBox(),
-        loading: () => const LoadingWidget(),
-        success: (data) {
-          
-          _controller.onInit = () {
-            _controller.loadVideoById(videoId: data?.key ?? "");
-          };
-          return Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              IconButton(onPressed: (){
-                Navigator.pop(context);
-              }, icon: const Icon(Icons.close)),
-              Expanded(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: YoutubePlayer(
-                    controller: _controller,
+      child: SafeArea(
+        child: trailerProvider.when(
+          initial: () => const SizedBox(),
+          loading: () => const LoadingWidget(),
+          success: (data) {
+            
+            _controller.onInit = () {
+              _controller.loadVideoById(videoId: data?.key ?? "");
+            };
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                IconButton(onPressed: (){
+                  Navigator.pop(context);
+                }, icon: const Icon(Icons.close)),
+                Expanded(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: YoutubePlayer(
+                      controller: _controller,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
-        error: (error) => ErrorText(
-          reload: () {
-            ref
-                .read(trailerMovieProvider(widget.id).notifier)
-                .getTrailerMovie();
+              ],
+            );
           },
+          error: (error) => ErrorText(
+            reload: () {
+              ref
+                  .read(trailerMovieProvider(widget.id).notifier)
+                  .getTrailerMovie();
+            },
+          ),
         ),
       ),
     );

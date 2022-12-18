@@ -8,7 +8,7 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: CupertinoActivityIndicator(
-        radius: 20,
+        radius: 15,
       ),
     );
   }

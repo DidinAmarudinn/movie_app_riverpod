@@ -20,6 +20,7 @@ abstract class MovieRepository {
   FutureEither<DetailMovie?> getDetailMovie(int id);
   FutureEither<Trailer?> getTrailerMovie(int id);
   FutureEither<ListGenres> getMovieGenres();
+  FutureEither<List<Movie>> searchMovie(String query);
 }
 
 class MovieRepositoryImpl extends MovieRepository {
@@ -115,11 +116,21 @@ class MovieRepositoryImpl extends MovieRepository {
       return left(e as APIError);
     }
   }
-  
+
   @override
   FutureEither<Trailer?> getTrailerMovie(int id) async {
-     try {
+    try {
       return right(await service.getMovieTrailer(id));
+    } catch (e) {
+      return left(e as APIError);
+    }
+  }
+
+  @override
+  FutureEither<List<Movie>> searchMovie(String query) async {
+    print("search query = $query");
+    try {
+      return right(await service.searchMovie(query));
     } catch (e) {
       return left(e as APIError);
     }

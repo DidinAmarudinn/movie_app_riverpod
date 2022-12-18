@@ -6,6 +6,8 @@ import 'package:movie_app_riverpod/src/constants/api_constants.dart';
 import 'package:movie_app_riverpod/src/features/movies/domain/entities/detail_movie.dart';
 import 'package:movie_app_riverpod/src/utils/theme.dart';
 
+import '../search/movie_by_genre_screen.dart';
+
 class DetailSection extends StatelessWidget {
   final DetailMovie? data;
   final double width;
@@ -44,16 +46,20 @@ class DetailSection extends StatelessWidget {
                   children: [
                     Text(
                       data?.title ?? "",
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1
+                          ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 8,
                     ),
                     Text(
                       data?.releaseDate ?? "",
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                          fontSize: 14, fontWeight: FontWeight.w300),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1
+                          ?.copyWith(fontSize: 14, fontWeight: FontWeight.w300),
                     ),
                     const SizedBox(
                       height: 12,
@@ -65,16 +71,17 @@ class DetailSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                         color: ThemeConfig.redColor.withOpacity(0.6),
                       ),
-                      child:
-                          Text(data?.originalLanguage?.toUpperCase() ?? ""),
+                      child: Text(data?.originalLanguage?.toUpperCase() ?? ""),
                     ),
                     const SizedBox(
                       height: 12,
                     ),
                     Text(
                       "Genre",
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                          fontSize: 16, fontWeight: FontWeight.w500),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1
+                          ?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(
                       height: 8,
@@ -82,20 +89,35 @@ class DetailSection extends StatelessWidget {
                     if (data?.genres != null)
                       Wrap(
                         children: data!.genres!
-                            .map((e) => Container(
-                                padding: const EdgeInsets.all(4),
-                                margin: const EdgeInsets.only(right: 6,bottom: 6),
-                                decoration: BoxDecoration(
-                                  color: ThemeConfig.greyColor,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  e.name ?? "",
-                                  style: const TextStyle(
-                                      color:Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w300),
-                                )))
+                            .map((e) => InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            MovieByGenreScreen(
+                                          genreId: e.id ?? 0,
+                                          genreName: e.name,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      margin: const EdgeInsets.only(
+                                          right: 6, bottom: 6),
+                                      decoration: BoxDecoration(
+                                        color: ThemeConfig.greyColor,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        e.name ?? "",
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300),
+                                      )),
+                                ))
                             .toList(),
                       )
                   ],
